@@ -25,7 +25,10 @@ PersistentKeepalive = 21
 
 
 An unofficial NHentai Android Client.
-This app  works for devices from API 14 (Android 4.0) and above. Теперь минимально API 21 (Android 5.0)
+This app  works for devices from API 14 (Android 4.0) and above. 
+
+Теперь минимально API 21 (Android 5.0)
+
 Releases: <https://github.com/Dar9586/NClientV2/releases>
 
 ## Translation
