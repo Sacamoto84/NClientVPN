@@ -206,11 +206,11 @@ public class MainActivity extends BaseActivity
 
         TunnelModel tunnelModel = Global.getVPN(this); //Читаем настройки
 
-        Log.i("...tunnelModel", "tunnelModel publicKey = "+tunnelModel.publicKey);
+        Log.i("...tunnelModel", "tunnelModel privateKey = "+tunnelModel.privateKey);
         Log.i("...tunnelModel", "tunnelModel IP = "+tunnelModel.IP);
         Log.i("...tunnelModel", "tunnelModel dns = "+tunnelModel.dns);
         Log.i("...tunnelModel", "tunnelModel endpoint = "+tunnelModel.endpoint);
-        Log.i("...tunnelModel", "tunnelModel privateKey = "+tunnelModel.privateKey);
+        Log.i("...tunnelModel", "tunnelModel publicKey = "+tunnelModel.publicKey);
 
         Tunnel tunnel = PersistentConnectionProperties.getInstance().getTunnel();
         Intent intentPrepare = GoBackend.VpnService.prepare(this);
