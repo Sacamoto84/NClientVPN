@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.dar.nclientv2.TagFilterActivity">
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/sort_by_name"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sort_by_popular"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/reset_tags"
+        android:title="@string/clear_tag_preferences"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/set_min_count"
+        android:title="@string/set_minimum_count"
+        app:showAsAction="never" />
+</menu>

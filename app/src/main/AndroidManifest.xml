@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-sdk tools:overrideLibrary="me.zhanghai.android.fastscroll" />
+
+    <application
+
+
+        android:name=".components.activities.CrashApplication"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_content"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/DarkTheme">
+
+        <activity android:name=".StatusManagerActivity" />
+        <activity
+            android:name=".PINActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/DarkTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".components.launcher.LauncherReal"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:targetActivity=".PINActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".components.launcher.LauncherCalculator"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_calculator"
+            android:label="@string/app_name_fake_calculator"
+            android:roundIcon="@mipmap/ic_launcher_calculator_round"
+            android:targetActivity=".PINActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity android:name=".StatusViewerActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".BookmarkActivity" />
+        <activity android:name=".CommentActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:parentActivityName=".PINActivity"
+            android:theme="@style/DarkTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="nhentai.net" />
+                <data android:path="/" />
+                <data android:pathPrefix="/search/" />
+                <data android:pathPrefix="/parody/" />
+                <data android:pathPrefix="/character/" />
+                <data android:pathPrefix="/tag/" />
+                <data android:pathPrefix="/artist/" />
+                <data android:pathPrefix="/favorites/" />
+                <data android:pathPrefix="/group/" />
+                <data android:pathPrefix="/language/" />
+                <data android:pathPrefix="/category/" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".GalleryActivity"
+            android:exported="true"
+            android:label="@string/title_activity_gallery"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/DarkTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data
+                    android:host="nhentai.net"
+                    android:pathPattern="/g/.*" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dar.nclientv2.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ZoomActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_zoom"
+            android:parentActivityName=".GalleryActivity"
+            android:theme="@style/DarkTheme.NoTitle" />
+        <activity
+            android:name=".LocalActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/DarkTheme" />
+        <activity
+            android:name=".TagFilterActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:label="@string/title_activity_tag_filter"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/DarkTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="nhentai.net" />
+                <data android:pathPrefix="/tags" />
+                <data android:pathPrefix="/artists" />
+                <data android:pathPrefix="/characters" />
+                <data android:pathPrefix="/parodies" />
+                <data android:pathPrefix="/groups" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dar.nclientv2.MainActivity" />
+        </activity>
+        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".RandomActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:pathPrefix="/random" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="nhentai.net" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FavoriteActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".CopyToClipboardActivity"
+            android:icon="@drawable/ic_content_copy"
+            android:label="@string/copyURL" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dar.nclientv2.MainActivity" />
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <service
+            android:name=".async.downloader.DownloadGalleryV2"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".async.converters.CreatePDF"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".async.converters.CreateZIP"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".async.ScrapeTags"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name="com.wireguard.android.backend.GoBackend$VpnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/pdf" />
+        </intent>
+    </queries>
+    <meta-data
+        android:name="com.dar.nclientv2.components.classes.integration.OkHttpGlideModule"
+        android:value="GlideModule" />
+</manifest>
