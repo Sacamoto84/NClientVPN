@@ -1,11 +1,15 @@
 package com.dar.nclientv2;
 
+import static com.wireguard.android.backend.Tunnel.State.DOWN;
+import static com.wireguard.android.backend.Tunnel.State.UP;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,9 +61,21 @@ import com.dar.nclientv2.settings.TagV2;
 import com.dar.nclientv2.utility.ImageDownloadUtility;
 import com.dar.nclientv2.utility.LogUtility;
 import com.dar.nclientv2.utility.Utility;
+import com.dar.nclientv2.wireguard.DataSource;
+import com.dar.nclientv2.wireguard.PersistentConnectionProperties;
+import com.dar.nclientv2.wireguard.TunnelModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.wireguard.android.backend.Backend;
+import com.wireguard.android.backend.GoBackend;
+import com.wireguard.android.backend.Tunnel;
+import com.wireguard.config.Config;
+import com.wireguard.config.InetEndpoint;
+import com.wireguard.config.InetNetwork;
+import com.wireguard.config.Interface;
+import com.wireguard.config.ParseException;
+import com.wireguard.config.Peer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,10 +165,67 @@ public class MainActivity extends BaseActivity
     private Toolbar toolbar;
     private Setting setting = null;
 
+    Backend backend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            backend.getRunningTunnelNames();
+        }
+        catch (NullPointerException e) {
+            // backend cannot be created without context
+            PersistentConnectionProperties.getInstance().setBackend(new GoBackend(this));
+            backend = PersistentConnectionProperties.getInstance().getBackend();
+        }
+
+        //TunnelModel tunnelModel = DataSource.getTunnelModel();
+
+        TunnelModel tunnelModel = new TunnelModel();
+        tunnelModel.privateKey =  "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
+        tunnelModel.IP = "10.21.151.19/32";
+        tunnelModel.dns = "8.8.8.8";
+
+        tunnelModel.endpoint = "de.wg.finevpn.org:993";//"83.171.227.10:993"//"de.wg.finevpn.org:993"
+        tunnelModel.publicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
+        try {
+            tunnelModel.allowedIPs.add(InetNetwork.parse("0.0.0.0/0"));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        tunnelModel.url = "10.0.0.1";
+
+        Tunnel tunnel = PersistentConnectionProperties.getInstance().getTunnel();
+
+        Intent intentPrepare = GoBackend.VpnService.prepare(this);
+        if(intentPrepare != null) {
+            startActivityForResult(intentPrepare, 0);
+        }
+        Interface.Builder interfaceBuilder = new Interface.Builder();
+        Peer.Builder peerBuilder = new Peer.Builder();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (backend.getState(PersistentConnectionProperties.getInstance().getTunnel()) == UP) {
+                        backend.setState(tunnel, DOWN, null);
+                    } else {
+                        backend.setState(tunnel, UP, new Config.Builder()
+                            .setInterface(interfaceBuilder.addAddress(InetNetwork.parse(tunnelModel.IP)).parsePrivateKey(tunnelModel.privateKey).build())
+                            .addPeer(peerBuilder.addAllowedIps(tunnelModel.allowedIPs).setEndpoint(InetEndpoint.parse(tunnelModel.endpoint)).parsePublicKey(tunnelModel.publicKey).build())
+                            .build());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
         //load inspector
         selectStartMode(getIntent(), getPackageName());
         LogUtility.d("Main started with mode " + modeType);
