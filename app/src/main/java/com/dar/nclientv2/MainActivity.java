@@ -5,7 +5,9 @@ import static com.wireguard.android.backend.Tunnel.State.UP;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -172,6 +175,13 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        SharedPreferences shared = this.getSharedPreferences("Settings", 0);
+        boolean useVPN = shared.getBoolean(this.getString(R.string.key_vpn_use), true);
+        Log.i("...onCreate", "useVPN ="+useVPN);
+
+
+
         try {
             backend.getRunningTunnelNames();
         }
@@ -180,25 +190,29 @@ public class MainActivity extends BaseActivity
             PersistentConnectionProperties.getInstance().setBackend(new GoBackend(this));
             backend = PersistentConnectionProperties.getInstance().getBackend();
         }
-
         //TunnelModel tunnelModel = DataSource.getTunnelModel();
+        // TunnelModel tunnelModel = new TunnelModel();
+//        tunnelModel.privateKey =  "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
+//        tunnelModel.IP = "10.21.151.19/32";
+//        tunnelModel.dns = "8.8.8.8";
+//        tunnelModel.endpoint = "de.wg.finevpn.org:993";//"83.171.227.10:993"//"de.wg.finevpn.org:993"
+//        tunnelModel.publicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
+//        try {
+//            tunnelModel.allowedIPs.add(InetNetwork.parse("0.0.0.0/0"));
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//        tunnelModel.url = "10.0.0.1";
 
-        TunnelModel tunnelModel = new TunnelModel();
-        tunnelModel.privateKey =  "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
-        tunnelModel.IP = "10.21.151.19/32";
-        tunnelModel.dns = "8.8.8.8";
+        TunnelModel tunnelModel = Global.getVPN(this); //Читаем настройки
 
-        tunnelModel.endpoint = "de.wg.finevpn.org:993";//"83.171.227.10:993"//"de.wg.finevpn.org:993"
-        tunnelModel.publicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
-        try {
-            tunnelModel.allowedIPs.add(InetNetwork.parse("0.0.0.0/0"));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        tunnelModel.url = "10.0.0.1";
+        Log.i("...tunnelModel", "tunnelModel publicKey = "+tunnelModel.publicKey);
+        Log.i("...tunnelModel", "tunnelModel IP = "+tunnelModel.IP);
+        Log.i("...tunnelModel", "tunnelModel dns = "+tunnelModel.dns);
+        Log.i("...tunnelModel", "tunnelModel endpoint = "+tunnelModel.endpoint);
+        Log.i("...tunnelModel", "tunnelModel privateKey = "+tunnelModel.privateKey);
 
         Tunnel tunnel = PersistentConnectionProperties.getInstance().getTunnel();
-
         Intent intentPrepare = GoBackend.VpnService.prepare(this);
         if(intentPrepare != null) {
             startActivityForResult(intentPrepare, 0);

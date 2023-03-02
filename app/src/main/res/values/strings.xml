@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+
+    <string name="key_vpn_use" translatable="false">key_vpn_use</string>
+    <string name="key_vpn_privateKey" translatable="false">key_vpn_privateKey</string>
+    <string name="key_vpn_ip" translatable="false">key_vpn_ip</string>
+    <string name="key_vpn_dns" translatable="false">key_vpn_dns</string>
+    <string name="key_vpn_endpoint" translatable="false">key_vpn_endpoint</string>
+    <string name="key_vpn_publicKey" translatable="false">key_vpn_publicKey</string>
+    <string name="key_vpn_allowedips" translatable="false">key_vpn_allowedips</string>
+    <string name="key_vpn_url" translatable="false">key_vpn_url</string>
+
+
+
+
+
+
+
     <string name="key_offscreen_limit" translatable="false">offscreen_limit</string>
     <string name="key_default_value" translatable="false">default_value</string>
     <string name="key_enable_beta" translatable="false">enable_beta</string>

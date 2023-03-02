@@ -2,9 +2,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
+
+    <PreferenceCategory
+        android:title="VPN"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="@string/key_vpn_use"
+            android:title="Use WireGuard"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:defaultValue="333"
+            android:key="@string/key_vpn_privateKey"
+            android:title="PrivateKey"
+            app:iconSpaceReserved="false"
+            app:positiveButtonText="true"
+            />
+
+    </PreferenceCategory>
+
+
     <PreferenceCategory
         android:title="@string/global_settings"
         app:iconSpaceReserved="false">
+
         <ListPreference
             android:defaultValue="@string/key_default_value"
             android:key="@string/key_language"

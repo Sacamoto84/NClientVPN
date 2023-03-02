@@ -41,8 +41,11 @@ import com.dar.nclientv2.components.classes.CustomSSLSocketFactory;
 import com.dar.nclientv2.utility.LogUtility;
 import com.dar.nclientv2.utility.Utility;
 import com.dar.nclientv2.utility.network.NetworkUtil;
+import com.dar.nclientv2.wireguard.TunnelModel;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.wireguard.config.InetNetwork;
+import com.wireguard.config.ParseException;
 
 import org.acra.ACRA;
 
@@ -83,7 +86,8 @@ public class Global {
     private static TitleType titleType;
     private static SortType sortType;
     private static LocalSortType localSortType;
-    private static boolean invertFix, buttonChangePage, hideMultitask, enableBeta, volumeOverride, zoomOneColumn, keepHistory, lockScreen, onlyTag, showTitles, removeAvoidedGalleries, useRtl;
+
+    private static boolean useVPN , invertFix, buttonChangePage, hideMultitask, enableBeta, volumeOverride, zoomOneColumn, keepHistory, lockScreen, onlyTag, showTitles, removeAvoidedGalleries, useRtl;
     private static ThemeScheme theme;
     private static DataUsageType usageMobile, usageWifi;
     private static String lastVersion, mirror;
@@ -299,6 +303,9 @@ public class Global {
         buttonChangePage = shared.getBoolean(context.getString(R.string.key_change_page_buttons), true);
         lockScreen = shared.getBoolean(context.getString(R.string.key_disable_lock), false);
         hideMultitask = shared.getBoolean(context.getString(R.string.key_hide_multitasking), true);
+
+        useVPN = shared.getBoolean(context.getString(R.string.key_vpn_use), true);
+
         infiniteScrollFavorite = shared.getBoolean(context.getString(R.string.key_infinite_scroll_favo), false);
         infiniteScrollMain = shared.getBoolean(context.getString(R.string.key_infinite_scroll_main), false);
         maxId = shared.getInt(context.getString(R.string.key_max_id), 300000);
@@ -406,6 +413,60 @@ public class Global {
         resources.updateConfiguration(c, resources.getDisplayMetrics());
         return l;
     }
+
+
+
+
+//    tunnelModel.privateKey =  "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
+//    tunnelModel.IP = "10.21.151.19/32";
+//    tunnelModel.dns = "8.8.8.8";
+//    tunnelModel.endpoint = "de.wg.finevpn.org:993";//"83.171.227.10:993"//"de.wg.finevpn.org:993"
+//    tunnelModel.publicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
+//    <string name="key_vpn_privateKey" translatable="false">key_vpn_privateKey</string>
+//    <string name="key_vpn_ip" translatable="false">key_vpn_ip</string>
+//    <string name="key_vpn_dns" translatable="false">key_vpn_dns</string>
+//    <string name="key_vpn_endpoint" translatable="false">key_vpn_endpoint</string>
+//    <string name="key_vpn_publicKey" translatable="false">key_vpn_publicKey</string>
+//    <string name="key_vpn_allowedips" translatable="false">key_vpn_allowedips</string>
+//    <string name="key_vpn_url" translatable="false">key_vpn_url</string>
+
+    public static TunnelModel getVPN(Context context) {
+        TunnelModel tunnelModel = new TunnelModel();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", 0);
+
+        String prefPrivateKey = context.getString(R.string.key_vpn_privateKey);
+        String defaultValuePrivateKey = "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
+        tunnelModel.privateKey = sharedPreferences.getString(prefPrivateKey, defaultValuePrivateKey);
+
+        String prefIP = context.getString(R.string.key_vpn_ip);
+        String defaultValueIP = "10.21.151.19/32";
+        tunnelModel.IP  = sharedPreferences.getString(prefIP, defaultValueIP);
+
+        String prefDNS = context.getString(R.string.key_vpn_dns);
+        String defaultValueDNS= "8.8.8.8";
+        tunnelModel.dns = sharedPreferences.getString(prefDNS, defaultValueDNS);
+
+        String prefEndpoint = context.getString(R.string.key_vpn_endpoint);
+        String defaultValueEndpoint = "de.wg.finevpn.org:993";
+        tunnelModel.endpoint = sharedPreferences.getString(prefEndpoint, defaultValueEndpoint);
+
+        String prefPublicKey = context.getString(R.string.key_vpn_publicKey);
+        String defaultValuePublicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
+        tunnelModel.publicKey = sharedPreferences.getString(prefPublicKey, defaultValuePublicKey);
+
+        try {
+            tunnelModel.allowedIPs.add(InetNetwork.parse("0.0.0.0/0"));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        tunnelModel.url = "10.0.0.1";
+
+        return tunnelModel;
+
+    }
+
+
 
     public static Locale getLanguage(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", 0);
