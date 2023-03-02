@@ -10,18 +10,9 @@
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
-            android:defaultValue="false"
             android:key="@string/key_vpn_use"
             android:title="Use WireGuard"
             app:iconSpaceReserved="false" />
-
-        <EditTextPreference
-            android:defaultValue="333"
-            android:key="@string/key_vpn_privateKey"
-            android:title="PrivateKey"
-            app:iconSpaceReserved="false"
-            app:positiveButtonText="true"
-            />
 
     </PreferenceCategory>
 

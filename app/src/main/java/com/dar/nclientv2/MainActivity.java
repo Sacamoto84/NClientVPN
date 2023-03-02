@@ -175,12 +175,12 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        requestStorage();
+        Global.initStorage(this);
 
         SharedPreferences shared = this.getSharedPreferences("Settings", 0);
         boolean useVPN = shared.getBoolean(this.getString(R.string.key_vpn_use), true);
         Log.i("...onCreate", "useVPN ="+useVPN);
-
-
 
         try {
             backend.getRunningTunnelNames();
@@ -211,6 +211,9 @@ public class MainActivity extends BaseActivity
         Log.i("...tunnelModel", "tunnelModel dns = "+tunnelModel.dns);
         Log.i("...tunnelModel", "tunnelModel endpoint = "+tunnelModel.endpoint);
         Log.i("...tunnelModel", "tunnelModel publicKey = "+tunnelModel.publicKey);
+
+
+
 
         Tunnel tunnel = PersistentConnectionProperties.getInstance().getTunnel();
         Intent intentPrepare = GoBackend.VpnService.prepare(this);
@@ -872,8 +875,10 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Global.initStorage(this);
-        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            startLocalActivity();
+
+        //if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            //startLocalActivity();
+
         if (requestCode == 2 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             new VersionChecker(this, true);
     }

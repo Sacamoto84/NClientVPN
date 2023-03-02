@@ -1,6 +1,7 @@
 package com.dar.nclientv2.settings;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -82,6 +83,8 @@ public class Global {
     public static File ZIPFOLDER;
     public static File TORRENTFOLDER;
     public static File BACKUPFOLDER;
+
+    public static File VPNFOLDER;
     private static Language onlyLanguage;
     private static TitleType titleType;
     private static SortType sortType;
@@ -192,6 +195,7 @@ public class Global {
         ZIPFOLDER = new File(MAINFOLDER, ZIPFOLDER_NAME);
         TORRENTFOLDER = new File(MAINFOLDER, TORRENTFOLDER_NAME);
         BACKUPFOLDER = new File(MAINFOLDER, BACKUPFOLDER_NAME);
+        VPNFOLDER = new File(MAINFOLDER, "vpn");
     }
 
     @Nullable
@@ -430,6 +434,7 @@ public class Global {
 //    <string name="key_vpn_allowedips" translatable="false">key_vpn_allowedips</string>
 //    <string name="key_vpn_url" translatable="false">key_vpn_url</string>
 
+
     public static TunnelModel getVPN(Context context) {
         TunnelModel tunnelModel = new TunnelModel();
 
@@ -438,6 +443,9 @@ public class Global {
         String prefPrivateKey = context.getString(R.string.key_vpn_privateKey);
         String defaultValuePrivateKey = "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
         tunnelModel.privateKey = sharedPreferences.getString(prefPrivateKey, defaultValuePrivateKey);
+        SharedPreferences.Editor editor;
+        editor = sharedPreferences.edit().putString("prefPrivateKey", tunnelModel.privateKey);
+        editor.apply();
 
         String prefIP = context.getString(R.string.key_vpn_ip);
         String defaultValueIP = "10.21.151.19/32";
@@ -461,6 +469,9 @@ public class Global {
             throw new RuntimeException(e);
         }
         tunnelModel.url = "10.0.0.1";
+
+
+
 
         return tunnelModel;
 
@@ -596,6 +607,7 @@ public class Global {
 
     public static void initStorage(Context context) {
         if (!Global.hasStoragePermission(context)) return;
+
         Global.initFilesTree(context);
         boolean[] bools = new boolean[]{
             Global.MAINFOLDER.mkdirs(),
@@ -606,6 +618,7 @@ public class Global {
             Global.ZIPFOLDER.mkdir(),
             Global.TORRENTFOLDER.mkdir(),
             Global.BACKUPFOLDER.mkdir(),
+            Global.VPNFOLDER.mkdir()
         };
         LogUtility.d(
             "0:" + context.getFilesDir() + '\n' +
