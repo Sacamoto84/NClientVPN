@@ -2,6 +2,9 @@
 
 [![Github](https://img.shields.io/github/v/release/Dar9586/NClientV2.svg?logo=github)](https://github.com/Dar9586/NClientV2/releases/latest) [![F-Droid](https://img.shields.io/f-droid/v/com.dar.nclientv2)](https://f-droid.org/en/packages/com.dar.nclientv2/) ![Bitrise](https://img.shields.io/bitrise/0a79e29cfda80c5f?token=BrSKdUUfKb97MHigL9nA1w)
 
+Добавленна поддержка WireGuard ибо сайт является закрытым, настройки берем https://finevpn.org бот в телеге @FineVPNbot
+Настройка клиента добавлена в насройках программы
+
 An unofficial NHentai Android Client.
 This app  works for devices from API 14 (Android 4.0) and above.
 Releases: <https://github.com/Dar9586/NClientV2/releases>
