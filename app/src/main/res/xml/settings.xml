@@ -10,8 +10,9 @@
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="@string/key_vpn_use"
-            android:title="Use WireGuard"
+            android:title="Use WireGuard /vpn/vpn.conf"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

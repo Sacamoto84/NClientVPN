@@ -1,5 +1,7 @@
 package com.dar.nclientv2.settings;
 
+import java.io.*;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,7 +21,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.webkit.CookieSyncManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,12 +55,14 @@ import com.wireguard.config.ParseException;
 import org.acra.ACRA;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 import okhttp3.Cookie;
@@ -90,7 +96,7 @@ public class Global {
     private static SortType sortType;
     private static LocalSortType localSortType;
 
-    private static boolean useVPN , invertFix, buttonChangePage, hideMultitask, enableBeta, volumeOverride, zoomOneColumn, keepHistory, lockScreen, onlyTag, showTitles, removeAvoidedGalleries, useRtl;
+    private static boolean useVPN, invertFix, buttonChangePage, hideMultitask, enableBeta, volumeOverride, zoomOneColumn, keepHistory, lockScreen, onlyTag, showTitles, removeAvoidedGalleries, useRtl;
     private static ThemeScheme theme;
     private static DataUsageType usageMobile, usageWifi;
     private static String lastVersion, mirror;
@@ -419,8 +425,6 @@ public class Global {
     }
 
 
-
-
 //    tunnelModel.privateKey =  "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
 //    tunnelModel.IP = "10.21.151.19/32";
 //    tunnelModel.dns = "8.8.8.8";
@@ -434,34 +438,80 @@ public class Global {
 //    <string name="key_vpn_allowedips" translatable="false">key_vpn_allowedips</string>
 //    <string name="key_vpn_url" translatable="false">key_vpn_url</string>
 
+    public static Boolean isFileExists(File file) {
+        return file.exists() && !file.isDirectory();
+    }
 
     public static TunnelModel getVPN(Context context) {
+
         TunnelModel tunnelModel = new TunnelModel();
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", 0);
 
-        String prefPrivateKey = context.getString(R.string.key_vpn_privateKey);
-        String defaultValuePrivateKey = "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
-        tunnelModel.privateKey = sharedPreferences.getString(prefPrivateKey, defaultValuePrivateKey);
-        SharedPreferences.Editor editor;
-        editor = sharedPreferences.edit().putString("prefPrivateKey", tunnelModel.privateKey);
-        editor.apply();
 
-        String prefIP = context.getString(R.string.key_vpn_ip);
-        String defaultValueIP = "10.21.151.19/32";
-        tunnelModel.IP  = sharedPreferences.getString(prefIP, defaultValueIP);
+        //проверям существование файла настроек
 
-        String prefDNS = context.getString(R.string.key_vpn_dns);
-        String defaultValueDNS= "8.8.8.8";
-        tunnelModel.dns = sharedPreferences.getString(prefDNS, defaultValueDNS);
+        File f = new File(Global.VPNFOLDER.getPath() + "/vpn.conf");
 
-        String prefEndpoint = context.getString(R.string.key_vpn_endpoint);
-        String defaultValueEndpoint = "de.wg.finevpn.org:993";
-        tunnelModel.endpoint = sharedPreferences.getString(prefEndpoint, defaultValueEndpoint);
+        if (isFileExists(f)) {
+            //Берем настройки из файла
+            Log.i("getVPN", "Файл настроек найден");
 
-        String prefPublicKey = context.getString(R.string.key_vpn_publicKey);
-        String defaultValuePublicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
-        tunnelModel.publicKey = sharedPreferences.getString(prefPublicKey, defaultValuePublicKey);
+            try {
+                // открываем поток для чтения
+                BufferedReader br = new BufferedReader(
+                    new FileReader(Global.VPNFOLDER.getPath() + "/vpn.conf"));
+                String str = "";
+
+                // читаем содержимое
+                while ((str = br.readLine()) != null) {
+                    Log.i("getVPN", str);
+                    String str2 = str.replaceAll(" ", "");
+                    String[] words = str2.split("=");
+
+                    if(words.length == 2) {
+                        switch (words[0]) {
+                            case ("PrivateKey"):
+                                tunnelModel.privateKey = words[1]+"=";
+                                break;
+                            case ("Address"):
+                                tunnelModel.IP = words[1];
+                                break;
+                            case ("DNS"):
+                                tunnelModel.dns = words[1];
+                                break;
+                            case ("PublicKey"):
+                                tunnelModel.publicKey = words[1]+"=";
+                                break;
+                            case ("Endpoint"):
+                                tunnelModel.endpoint = words[1];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        } else {
+            Log.i("getVPN", "Файл настроек не найден");
+
+            Toast.makeText(context, "Файл настроек VPN /vpn/vpn.conf не найден, отключено", Toast.LENGTH_SHORT).show();
+
+            SharedPreferences shared = context.getSharedPreferences("Settings", 0);
+            shared.edit().putBoolean(context.getString(R.string.key_vpn_use), false).commit();
+
+//            //Нет файла... используем что по умолчанию
+//            tunnelModel.privateKey = "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";
+//            tunnelModel.IP = "10.21.151.19/32";
+//            tunnelModel.dns = "8.8.8.8";
+//            tunnelModel.endpoint = "de.wg.finevpn.org:993";
+//            tunnelModel.publicKey = "D9myUw1V14LApTC5V8qVsXlxHov/1bnPgKrIehKSyR8=";
+        }
 
         try {
             tunnelModel.allowedIPs.add(InetNetwork.parse("0.0.0.0/0"));
@@ -470,13 +520,9 @@ public class Global {
         }
         tunnelModel.url = "10.0.0.1";
 
-
-
-
         return tunnelModel;
 
     }
-
 
 
     public static Locale getLanguage(Context context) {
