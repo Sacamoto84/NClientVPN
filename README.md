@@ -6,19 +6,26 @@
 Настройка клиента добавлена в насройках программы. Используем данные настройки.
 
 [Interface]
+
 -> PrivateKey = 0FSuBk31SOpyZsJeGTKs4hwL3NssAoHsQlyucZU0024=
+
 -> Address = 10.21.57.22
+
 -> DNS = 1.1.1.1
 
 [Peer]
+
 -> PublicKey = 0pkNqlR6IREHG7nwT/YUqNWMScE6l/pn/ihuqH/VHyY=
+
 AllowedIps = 0.0.0.0/0
+
 -> Endpoint = se.wg.finevpn.org:993
+
 PersistentKeepalive = 21
 
 
 An unofficial NHentai Android Client.
-This app  works for devices from API 14 (Android 4.0) and above.
+This app  works for devices from API 14 (Android 4.0) and above. Теперь минимально API 21 (Android 5.0)
 Releases: <https://github.com/Dar9586/NClientV2/releases>
 
 ## Translation
