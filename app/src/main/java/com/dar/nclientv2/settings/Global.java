@@ -469,10 +469,10 @@ public class Global {
                     String str2 = str.replaceAll(" ", "");
                     String[] words = str2.split("=");
 
-                    if(words.length == 2) {
+                    if (words.length == 2) {
                         switch (words[0]) {
                             case ("PrivateKey"):
-                                tunnelModel.privateKey = words[1]+"=";
+                                tunnelModel.privateKey = words[1] + "=";
                                 break;
                             case ("Address"):
                                 tunnelModel.IP = words[1];
@@ -481,7 +481,7 @@ public class Global {
                                 tunnelModel.dns = words[1];
                                 break;
                             case ("PublicKey"):
-                                tunnelModel.publicKey = words[1]+"=";
+                                tunnelModel.publicKey = words[1] + "=";
                                 break;
                             case ("Endpoint"):
                                 tunnelModel.endpoint = words[1];
@@ -500,10 +500,10 @@ public class Global {
         } else {
             Log.i("getVPN", "Файл настроек не найден");
 
-            Toast.makeText(context, "Файл настроек VPN /vpn/vpn.conf не найден, отключено", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Файл настроек VPN /vpn/vpn.conf не найден", Toast.LENGTH_SHORT).show();
 
-            SharedPreferences shared = context.getSharedPreferences("Settings", 0);
-            shared.edit().putBoolean(context.getString(R.string.key_vpn_use), false).commit();
+            //SharedPreferences shared = context.getSharedPreferences("Settings", 0);
+            //shared.edit().putBoolean(context.getString(R.string.key_vpn_use), false).commit();
 
 //            //Нет файла... используем что по умолчанию
 //            tunnelModel.privateKey = "2EBWMuvC8coVnyApgJTcpMnxt51XToX+MOObXHAMjnI=";

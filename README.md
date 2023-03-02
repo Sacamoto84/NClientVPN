@@ -3,29 +3,29 @@
 [![Github](https://img.shields.io/github/v/release/Dar9586/NClientV2.svg?logo=github)](https://github.com/Dar9586/NClientV2/releases/latest) [![F-Droid](https://img.shields.io/f-droid/v/com.dar.nclientv2)](https://f-droid.org/en/packages/com.dar.nclientv2/) ![Bitrise](https://img.shields.io/bitrise/0a79e29cfda80c5f?token=BrSKdUUfKb97MHigL9nA1w)
 
 Добавленна поддержка WireGuard ибо сайт является закрытым, настройки берем https://finevpn.org бот в телеге @FineVPNbot
-Настройка клиента добавлена в насройках программы. Используем данные настройки.
-
+Настройка клиента добавлена в насройках программы. Файл настроек кидаем в NClientV2\vpn\vpn.conf
+при включении VPN и отсуствию файла, VPN работать не будет. Настройки принимаются после перезегрузки программы.
 [Interface]
 
--> PrivateKey = 0FSuBk31SOpyZsJeGTKs4hwL3NssAoHsQlyucZU0024=
+PrivateKey = 0FSuBk31SOpyZsJeGTKs4hwL3NssAoHsQlyucZU0024=
 
--> Address = 10.21.57.22
+Address = 10.21.57.22
 
--> DNS = 1.1.1.1
+DNS = 1.1.1.1
 
 [Peer]
 
--> PublicKey = 0pkNqlR6IREHG7nwT/YUqNWMScE6l/pn/ihuqH/VHyY=
+PublicKey = 0pkNqlR6IREHG7nwT/YUqNWMScE6l/pn/ihuqH/VHyY=
 
 AllowedIps = 0.0.0.0/0
 
--> Endpoint = se.wg.finevpn.org:993
+Endpoint = se.wg.finevpn.org:993
 
 PersistentKeepalive = 21
 
 
 An unofficial NHentai Android Client.
-This app  works for devices from API 14 (Android 4.0) and above. 
+This app  works for devices from API 14 (Android 4.0) and above.
 
 Теперь минимально API 21 (Android 5.0)
 

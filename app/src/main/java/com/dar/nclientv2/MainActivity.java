@@ -203,8 +203,6 @@ public class MainActivity extends BaseActivity
 //        }
 //        tunnelModel.url = "10.0.0.1";
 
-
-
             if (tunnelModel.privateKey != null)
             {
 
