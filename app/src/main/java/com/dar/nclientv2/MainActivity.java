@@ -171,6 +171,8 @@ public class MainActivity extends BaseActivity
 
     Backend backend;
 
+    Boolean isUseVPN = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +185,8 @@ public class MainActivity extends BaseActivity
         boolean useVPN = shared.getBoolean(this.getString(R.string.key_vpn_use), true);
         Log.i("...onCreate", "useVPN ="+useVPN);
 
-        if (useVPN)
+
+        if (useVPN && !isUseVPN)
         {
             Toast.makeText(this, "VPN Enable", Toast.LENGTH_SHORT).show();
 
@@ -251,7 +254,7 @@ public class MainActivity extends BaseActivity
 
 
 
-
+            isUseVPN = true;
 
         }
         else
